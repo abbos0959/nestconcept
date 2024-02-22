@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { FlaworEntity } from './flawor.entity/flawor.entity';
 
 @Entity('coffee')
 export class Coffee {
@@ -10,7 +18,10 @@ export class Coffee {
 
   @Column()
   brand: string;
+  @Column({ default: 0 })
+  recombination: number;
 
-  @Column('json', { nullable: true })
-  flawors: string[];
+  @JoinTable()
+  @ManyToMany(() => FlaworEntity, (flawor) => flawor.coffess, { cascade: true })
+  flawors: FlaworEntity[];
 }
